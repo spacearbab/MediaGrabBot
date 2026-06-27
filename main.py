@@ -2,6 +2,8 @@ import asyncio
 import sys
 from app.src.main.res.xml.config import settings
 from app.src.main.media.grab.os.di.container import container
+from app.src.main.media.grab.os.ui.home.handler import router as home_router
+from app.src.main.media.grab.os.ui.paste.handler import router as paste_router
 from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
@@ -17,11 +19,11 @@ async def main():
     )
     dp = Dispatcher()
     
-    print("Initializing MediaGrab Core...")
-    _ = container.extractor
-    print("Core initialized successfully. Bot is running...")
-
-    # هندلرهای UI در مرحله بعد اینجا اضافه می‌شوند
+    # ثبت هندلرها در Dispatcher
+    dp.include_router(home_router)
+    dp.include_router(paste_router)
+    
+    print("MediaGrab Bot is starting... Core initialized.")
     
     await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot)
